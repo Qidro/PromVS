@@ -6,10 +6,22 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+ //  weighingStatic = new FORM();
+   // weighingStatic->show();
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+
+void MainWindow::on_pushButton_5_clicked()
+{
+    WeighingStatic *weighingStaticForm = new WeighingStatic();
+        weighingStaticForm->show(); // Показываем новую форму
+        this->close();
+   // weighingStatic->show();
+
 }
 

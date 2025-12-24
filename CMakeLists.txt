@@ -19,6 +19,9 @@ set(PROJECT_SOURCES
         mainwindow.cpp
         mainwindow.h
         mainwindow.ui
+        weighingstatic.cpp
+        weighingstatic.h
+        weighingstatic.ui
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
