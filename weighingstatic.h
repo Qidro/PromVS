@@ -15,6 +15,9 @@ public:
     explicit WeighingStatic(QWidget *parent = nullptr);
     ~WeighingStatic();
 
+private slots:
+    void on_pushButton_clicked();
+
 private:
     Ui::WeighingStatic *ui;
 };

@@ -13,6 +13,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+find_package(Qt5 COMPONENTS Core SerialPort REQUIRED)
 
 set(PROJECT_SOURCES
         main.cpp
@@ -22,6 +23,9 @@ set(PROJECT_SOURCES
         weighingstatic.cpp
         weighingstatic.h
         weighingstatic.ui
+        switchvs.h
+        switchvs.cpp
+
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -60,3 +64,4 @@ set_target_properties(PromVC PROPERTIES
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(PromVC)
 endif()
+target_link_libraries(PromVC PRIVATE Qt5::Core Qt5::SerialPort)

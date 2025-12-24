@@ -12,3 +12,9 @@ WeighingStatic::~WeighingStatic()
 {
     delete ui;
 }
+
+void WeighingStatic::on_pushButton_clicked()
+{
+
+}
+

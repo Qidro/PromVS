@@ -19,7 +19,9 @@ MainWindow::~MainWindow()
 void MainWindow::on_pushButton_5_clicked()
 {
     WeighingStatic *weighingStaticForm = new WeighingStatic();
-        weighingStaticForm->show(); // Показываем новую форму
+    // Показываем новую форму
+        weighingStaticForm->show();
+        //закрывает эту форму
         this->close();
    // weighingStatic->show();
 
