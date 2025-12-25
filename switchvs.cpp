@@ -10,7 +10,7 @@ switchVS::switchVS(QObject *parent)
 
 }
 
-int extractNumber(const char* str) {
+int switchVS::extractNumber(const char* str) {
     const char* p = str;
     // Сначала пропускаем все ненумерующие символы (можно также искать первый знак минуса)
     while (*p && !isdigit(*p) && *p != '-' && *p != '+') {
@@ -38,7 +38,7 @@ int extractNumber(const char* str) {
     return atoi(numberBuffer);
 }
 
-void startStatic()
+void switchVS::startStatic()
 {
 
     QSerialPort serial;
@@ -56,10 +56,13 @@ void startStatic()
                         qDebug() << "Задержка завершена";
                      // Завершение приложения
                     });
+             qDebug() << "Я здесь";
 
             QObject::connect(&serial, &QSerialPort::readyRead, [&serial]() {
                     QByteArray data = serial.readAll();
+                       qDebug() << "А теперь здесь";
                     while (serial.waitForReadyRead(100))
+                            qDebug() << "while";
                             data += serial.readAll();
                     QString readableData = QString::fromUtf8(data);
 
@@ -67,12 +70,13 @@ void startStatic()
                         // Выводим данные в читаемом формате
                         qDebug() << "Полученные данныеt:" << readableData;
                     //qDebug() << "Полученные данные:" << data;
-                           int number = extractNumber(data);
-                           number = number / 10;
-                              qDebug() << "Данные в формате int :" << number;
+                          // int number = extractNumber(data);
+                         //  number = number / 10;
+                           //   qDebug() << "Данные в формате int :" << number;
                     // Обработка данных
                 });
 
+            qDebug() << "чзх";
 
     }
 }
