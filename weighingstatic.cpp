@@ -66,11 +66,32 @@ int WeighingStatic::extractNumber(const char* str) {
 
 void WeighingStatic::on_pushButton_clicked()
 {
-    if (serial[0]->open(QIODevice::ReadWrite)) {
-            QMessageBox::information(this, "Success", "Connected to the port!");
-        } else {
-            QMessageBox::critical(this, "Error", "Failed to open the port!");
+    if(ui->pushButton->text() == "Начать взвешивание")
+    {
+        if (!serial[0]->open(QIODevice::ReadWrite) && !serial[1]->open(QIODevice::ReadWrite) && !serial[2]->open(QIODevice::ReadWrite) && !serial[3]->open(QIODevice::ReadWrite))
+        {
+            for (int i = 0; i < 4; ++i) {
+            connect(serial[i], &QSerialPort::readyRead, this, &WeighingStatic::readData);
         }
+
+       }
+        ui->pushButton->setText("Закончить взвешивание");
+
+        if (serial[0]->open(QIODevice::ReadWrite) && serial[1]->open(QIODevice::ReadWrite) && serial[2]->open(QIODevice::ReadWrite) && serial[3]->open(QIODevice::ReadWrite)) {
+                QMessageBox::information(this, "Success", "Все порты подключены!");
+            } else {
+                QMessageBox::critical(this, "Error", "Какой то порт не активен!");
+            }
+    }
+    else if(ui->pushButton->text() == "Закончить взвешивание")
+    {
+        ui->pushButton->setText("Начать взвешивание");
+        for (int i = 0; i < 4; ++i) {
+        disconnect(serial[i], &QSerialPort::readyRead, this, &WeighingStatic::readData);
+        }
+    }
+
+
 }
 
 void WeighingStatic::readData()
@@ -91,8 +112,15 @@ void WeighingStatic::readData()
         qDebug() << "Received data:" << dataGlobalInt;
     }
 
-
     ui->label->setText("Вес вагона: " +QString::number(dataGlobalInt) + "кг" );
+
+    //if( dataGlobalInt == 888888)
+   // {
+   //      ui->label->setText("Ошибка чтения" );
+    //}
+   // else{
+   //     ui->label->setText("Вес вагона: " +QString::number(dataGlobalInt) + "кг" );
+ //   }
     //dataGlobalInt = 0;
 }
 
