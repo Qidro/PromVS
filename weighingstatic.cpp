@@ -1,9 +1,11 @@
 #include "weighingstatic.h"
 #include "ui_weighingstatic.h"
+#include "switchvs.h"
 
 WeighingStatic::WeighingStatic(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::WeighingStatic)
+
 {
     ui->setupUi(this);
 }
@@ -15,6 +17,8 @@ WeighingStatic::~WeighingStatic()
 
 void WeighingStatic::on_pushButton_clicked()
 {
-
+    switchVS switchVs;
+    switchVs.startStatic();
+    //switchVs.startStatic();
 }
 

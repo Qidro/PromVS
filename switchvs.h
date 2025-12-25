@@ -8,8 +8,9 @@ class switchVS : public QObject
     Q_OBJECT
 public:
     explicit switchVS(QObject *parent = nullptr);
-int extractNumber(const char* str);
 void startStatic();
+int extractNumber(const char* str);
+
 
 
 signals:
