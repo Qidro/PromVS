@@ -24,7 +24,7 @@ private slots:
 
 private:
     Ui::WeighingStatic *ui;
-     QSerialPort *serial;
+     QSerialPort *serial[4];
 };
 
 #endif // WEIGHINGSTATIC_H

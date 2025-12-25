@@ -6,21 +6,29 @@
 WeighingStatic::WeighingStatic(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::WeighingStatic)
-  , serial(new QSerialPort(this))
+
 
 {
     ui->setupUi(this);
+    //for (int i = 0; i < 4; ++i) {
+     //       serial[i] = new QSerialPort(this);
+            // Дополнительные настройки для каждого порта можно добавить здесь
+     //   }
+    for (int i = 0; i < 4; ++i) {
+            serial[i] = new QSerialPort(this);
+            // Дополнительные настройки для каждого порта можно добавить здесь
+            // Установка параметров порта
+            serial[i]->setPortName("ttyr0"+QString::number(i)); // Измените на "/dev/ttyUSB0" на Linux
+            serial[i]->setBaudRate(QSerialPort::Baud9600);
+            serial[i]->setDataBits(QSerialPort::Data8);
+            serial[i]->setParity(QSerialPort::NoParity);
+            serial[i]->setStopBits(QSerialPort::OneStop);
+            serial[i]->setFlowControl(QSerialPort::NoFlowControl);
 
-    // Установка параметров порта
-    serial->setPortName("ttyr00"); // Измените на "/dev/ttyUSB0" на Linux
-    serial->setBaudRate(QSerialPort::Baud9600);
-    serial->setDataBits(QSerialPort::Data8);
-    serial->setParity(QSerialPort::NoParity);
-    serial->setStopBits(QSerialPort::OneStop);
-    serial->setFlowControl(QSerialPort::NoFlowControl);
+            // Подключение сигнала readyRead к слоту readData
+            connect(serial[i], &QSerialPort::readyRead, this, &WeighingStatic::readData);
+        }
 
-    // Подключение сигнала readyRead к слоту readData
-    connect(serial, &QSerialPort::readyRead, this, &WeighingStatic::readData);
 }
 
 WeighingStatic::~WeighingStatic()
@@ -58,7 +66,7 @@ int WeighingStatic::extractNumber(const char* str) {
 
 void WeighingStatic::on_pushButton_clicked()
 {
-    if (serial->open(QIODevice::ReadWrite)) {
+    if (serial[0]->open(QIODevice::ReadWrite)) {
             QMessageBox::information(this, "Success", "Connected to the port!");
         } else {
             QMessageBox::critical(this, "Error", "Failed to open the port!");
@@ -67,14 +75,24 @@ void WeighingStatic::on_pushButton_clicked()
 
 void WeighingStatic::readData()
 {
-    QByteArray data = serial->readAll();
-     while (serial->waitForReadyRead(100))
-            data += serial->readAll();
-    // Обработка полученных данных
-    QString receivedData = QString::fromUtf8(data);
-    int dataInt = extractNumber(data);
-    dataInt = dataInt/10;
-    // Здесь можно обновить интерфейс или вывести данные в консоль
-    qDebug() << "Received data:" << dataInt;
+    int dataGlobalInt = 0;
+    int result=0;
+    for (int i = 0; i < 4; ++i)
+    {
+
+        QByteArray data = serial[i]->readAll();
+         while (serial[i]->waitForReadyRead(10))
+                data += serial[i]->readAll();
+        // Обработка полученных данных
+        QString receivedData = QString::fromUtf8(data);
+        int dataInt = extractNumber(data);
+        dataGlobalInt += dataInt/10;
+        // Здесь можно обновить интерфейс или вывести данные в консоль
+        qDebug() << "Received data:" << dataGlobalInt;
+    }
+
+
+    ui->label->setText("Вес вагона: " +QString::number(dataGlobalInt) + "кг" );
+    //dataGlobalInt = 0;
 }
 
